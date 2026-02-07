@@ -78,13 +78,13 @@ fn main() {
     let mut source = String::new();
     io::stdin().read_to_string(&mut source).unwrap();
 
-    let mut lexer = Lexer::new(&source);
+    let mut lexer = Lexer::new(source);
 
     lexer.scan_tokens();
 }
 
 impl Lexer {
-    fn new(source: &str) -> Self {
+    fn new(source: String) -> Self {
         Self {
             source: source.chars().collect(),
             token_list: vec![],
