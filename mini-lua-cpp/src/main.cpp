@@ -141,8 +141,8 @@ private:
 
     Token* scan_token();
     void scan_comment();
-    Token* scan_number();
-    Token* scan_string();
+    TokenNumber* scan_number();
+    TokenString* scan_string();
     Token* scan_name();
     char parse_escape();
     std::string extract_word();
@@ -312,7 +312,7 @@ void Lexer::scan_comment() {
     }
 }
 
-Token* Lexer::scan_number() {
+TokenNumber* Lexer::scan_number() {
     bool hex = false;
     bool floating = false;
     bool science = false;
@@ -367,7 +367,7 @@ Token* Lexer::scan_number() {
     }
 }
 
-Token* Lexer::scan_string() {
+TokenString* Lexer::scan_string() {
     char str_tag = previous();
     std::string string;
     while (peek() != str_tag) {
