@@ -1,6 +1,15 @@
 use std::collections::HashMap;
 use std::io::{self, Read};
 
+fn main() {
+    let mut source = String::new();
+    io::stdin().read_to_string(&mut source).unwrap();
+
+    let mut lexer = Lexer::new(source);
+
+    lexer.scan_tokens();
+}
+
 enum Token {
     Reserved(ReservedWord),
     Number(f64),
@@ -72,15 +81,6 @@ struct Lexer {
     current: usize,
     start: usize,
     reserved_words: HashMap<String, ReservedWord>,
-}
-
-fn main() {
-    let mut source = String::new();
-    io::stdin().read_to_string(&mut source).unwrap();
-
-    let mut lexer = Lexer::new(source);
-
-    lexer.scan_tokens();
 }
 
 impl Lexer {
