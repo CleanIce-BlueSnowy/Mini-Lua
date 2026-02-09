@@ -6,8 +6,9 @@ fn main() {
     io::stdin().read_to_string(&mut source).unwrap();
 
     let mut lexer = Lexer::new(source);
-
     lexer.scan_tokens();
+
+    let mut parser = Parser::new(lexer.token_list);
 }
 
 enum Token {
@@ -120,25 +121,6 @@ impl Lexer {
         while !self.is_at_end() {
             let token = self.scan_token();
             if !matches!(token, Token::Comment) {
-                let word = self.extract_word();
-                print!(
-                    "{token_type}",
-                    token_type = match token {
-                        Token::Reserved(_) => "[RESERVED]",
-                        Token::Number(_) => "[NUMBER]",
-                        Token::String(_) => "[STRING]",
-                        Token::Symbol(_) => "[SYMBOL]",
-                        Token::Name(_) => "[NAME]",
-                        Token::EOL => "[EOL]",
-                        Token::Comment => unreachable!("Unexpected Comment token."),
-                        Token::EOF => unreachable!("Unexpected EOF token."),
-                    }
-                );
-                if matches!(token, Token::EOL) {
-                    println!();
-                } else {
-                    println!(" {word}");
-                }
                 self.token_list.push(token);
             }
         }
@@ -371,5 +353,59 @@ impl Lexer {
                 false
             }
         }
+    }
+}
+
+enum Value {
+    Number(f64),
+}
+
+enum Expr {
+    Variable(Box<ExprVariable>),
+    Literal(Box<ExprLiteral>),
+    Unary(Box<ExprUnary>),
+}
+
+struct ExprVariable {
+    name: String,
+}
+
+struct ExprLiteral {
+    value: Value,
+}
+
+struct ExprUnary {
+    ope: Token,
+    rhs: Value,
+}
+
+struct Parser {
+    token_list: Vec<Token>,
+    current: usize,
+}
+
+impl Parser {
+    fn new(token_list: Vec<Token>) -> Self {
+        Self {
+            token_list,
+            current: 0,
+        }
+    }
+
+    fn is_at_end(&self) -> bool {
+        matches!(self.token_list[self.current], Token::EOF)
+    }
+
+    fn advance(&mut self) -> &Token {
+        if self.is_at_end() {
+            &Token::EOF
+        } else {
+            self.current += 1;
+            &self.token_list[self.current - 1]
+        }
+    }
+
+    fn peek(&self) -> &Token {
+        &self.token_list[self.current]
     }
 }
