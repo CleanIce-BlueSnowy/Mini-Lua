@@ -166,7 +166,7 @@ class Lexer:
                 else:
                     print(f" {word}")
                 self.token_list.append(token)
-            self.token_list.append(TokenEOF())
+        self.token_list.append(TokenEOF())
 
 
     def scan_token(self) -> Token:
