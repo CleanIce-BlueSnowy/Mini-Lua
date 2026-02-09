@@ -222,6 +222,8 @@ void Lexer::scan_tokens() {
                 std::println(" {}", word);
             }
             token_list.push_back(token);
+        } else {
+            delete token;
         }
     }
     token_list.push_back(new TokenEOF());
