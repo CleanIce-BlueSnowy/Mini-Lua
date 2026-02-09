@@ -145,14 +145,14 @@ private:
     TokenString* scan_string();
     Token* scan_name();
     char parse_escape();
-    std::string extract_word();
+    std::string extract_word() const;
     void skip_whitespace();
     void align_pointer();
     static bool is_name_char(char ch, bool start);
-    bool is_at_end();
+    bool is_at_end() const;
     char advance();
     char previous();
-    char peek();
+    char peek() const;
     bool match_char(char target);
 
 public:
@@ -403,7 +403,7 @@ char Lexer::parse_escape() {
     }
 }
 
-std::string Lexer::extract_word() {
+std::string Lexer::extract_word() const {
     return source.substr(start, current - start);
 }
 
@@ -427,7 +427,7 @@ bool Lexer::is_name_char(char ch, bool start) {
     }
 }
 
-bool Lexer::is_at_end() {
+bool Lexer::is_at_end() const {
     return current >= source.size();
 }
 
@@ -447,7 +447,7 @@ char Lexer::previous() {
     }
 }
 
-char Lexer::peek() {
+char Lexer::peek() const {
     if (is_at_end()) {
         return '\0';
     } else {
